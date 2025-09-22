@@ -9,8 +9,10 @@ dotenv.config();
 const createAdmin = async () => {
   try {
     // Connect to MongoDB
+    // mongodb+srv://aspirechess_db_user:qJa6eF7Ko1GcxCeN@cluster0.hiaqfur.mongodb.net/dashboard
+    // mongodb://localhost:27017/chess-academy
     await mongoose.connect(
-      process.env.MONGODB_URI || "mongodb://localhost:27017/chess-academy"
+      process.env.MONGODB_URI || "mongodb+srv://aspirechess_db_user:qJa6eF7Ko1GcxCeN@cluster0.hiaqfur.mongodb.net/dashboard"
     );
     console.log("✅ Connected to MongoDB");
 
@@ -24,8 +26,8 @@ const createAdmin = async () => {
 
     // Admin details
     const adminData = {
-      email: "admin@chessacademy.com",
-      password: "admin123", // This will be hashed
+      email: "aspirechess@gmail.com",
+      password: "test123", // This will be hashed
       firstName: "Chess",
       lastName: "Admin",
       phoneNumber: "+1234567890",
