@@ -96,21 +96,9 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Database connection with serverless-friendly options
-const mongoOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  maxPoolSize: 10,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-  bufferCommands: false,
-  bufferMaxEntries: 0,
-  connectTimeoutMS: 10000,
-  family: 4 // Use IPv4, skip trying IPv6
-};
-
+// Database connection - Simple and clean
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/chess-academy", mongoOptions)
+  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/chess-academy")
   .then(() => {
     console.log("✅ Connected to MongoDB");
     // Schedule cleanup jobs after database connection
