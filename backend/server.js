@@ -56,13 +56,38 @@ if (process.env.RATE_LIMIT === "true") {
   console.log("🔓 Rate limiting disabled");
 }
 
-// CORS configuration
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    credentials: true,
-  })
-);
+// CORS configuration - Enhanced for production
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      process.env.FRONTEND_URL || "http://localhost:5173",
+      "https://aspire-chess-dashboard-frontend.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:3000"
+    ];
+    
+    console.log(`CORS check - Origin: ${origin}, Allowed: ${allowedOrigins.includes(origin)}`);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log(`CORS blocked origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
 
 // Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
@@ -71,9 +96,21 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Database connection
+// Database connection with serverless-friendly options
+const mongoOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  bufferCommands: false,
+  bufferMaxEntries: 0,
+  connectTimeoutMS: 10000,
+  family: 4 // Use IPv4, skip trying IPv6
+};
+
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/chess-academy")
+  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/chess-academy", mongoOptions)
   .then(() => {
     console.log("✅ Connected to MongoDB");
     // Schedule cleanup jobs after database connection
