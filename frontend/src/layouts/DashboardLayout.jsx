@@ -54,8 +54,8 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <Flex 
-      h={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
-      maxH={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
+      h={{ base: "100dvh", md: "100vh" }}
+      maxH={{ base: "100dvh", md: "100vh" }}
       w="100vw"
       maxW="100vw"
       overflow="hidden"
@@ -81,8 +81,8 @@ const DashboardLayout = ({ children }) => {
         transition="margin-left 0.3s ease"
         w={{ base: "100vw", md: "auto" }}
         maxW={{ base: "100vw", md: "none" }}
-        h={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
-        maxH={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
+        h={{ base: "100dvh", md: "100vh" }}
+        maxH={{ base: "100dvh", md: "100vh" }}
       >
         {/* Mobile Header Bar */}
         <Flex
@@ -135,10 +135,10 @@ const DashboardLayout = ({ children }) => {
         {/* Page Content */}
         <Box 
           flex="1"
-          h={{ base: "calc(var(--vh, 1vh) * 100 - 4rem)", md: "calc(100vh - 4rem)" }}
-          maxH={{ base: "calc(var(--vh, 1vh) * 100 - 4rem)", md: "calc(100vh - 4rem)" }}
+          h={{ base: "calc(100dvh - 4rem)", md: "calc(100vh - 4rem)" }}
+          maxH={{ base: "calc(100dvh - 4rem)", md: "calc(100vh - 4rem)" }}
           pt={{ base: "0", md: "16" }} 
-          pb={{ base: "4", md: "8" }}
+          pb={{ base: "6", md: "8" }}
           px={{ base: "4", md: "0" }}
           w="full"
           maxW="100%"
