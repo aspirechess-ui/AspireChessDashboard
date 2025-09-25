@@ -38,7 +38,14 @@ const DashboardLayout = ({ children }) => {
   }
 
   return (
-    <Flex h="100vh" bg={colorMode === "dark" ? "gray.900" : "gray.50"}>
+    <Flex 
+      h="100vh" 
+      maxH="100vh"
+      w="100vw"
+      maxW="100vw"
+      overflow="hidden"
+      bg={colorMode === "dark" ? "gray.900" : "gray.50"}
+    >
       {/* Sidebar */}
       <Sidebar
         userRole={user.role}
@@ -56,34 +63,65 @@ const DashboardLayout = ({ children }) => {
         position="relative"
         bg={colorMode === "dark" ? "gray.900" : "gray.50"}
         transition="margin-left 0.3s ease"
+        w={{ base: "100vw", md: "auto" }}
+        maxW={{ base: "100vw", md: "none" }}
       >
-        {/* Mobile Menu Button */}
-        <IconButton
-          position="absolute"
-          top="4"
-          left="4"
+        {/* Mobile Header Bar */}
+        <Flex
+          position="sticky"
+          top="0"
+          left="0"
+          right="0"
           zIndex="10"
-          size="sm"
-          variant="outline"
-          display={{ base: "flex", md: "none" }}
-          onClick={() => setSidebarOpen(true)}
+          h="16"
+          px="4"
+          align="center"
+          justify="space-between"
           bg={colorMode === "dark" ? "gray.800" : "white"}
-          borderColor={colorMode === "dark" ? "gray.600" : "gray.300"}
-          color={colorMode === "dark" ? "gray.300" : "gray.600"}
-          _hover={{
-            bg: colorMode === "dark" ? "gray.700" : "gray.50",
-          }}
+          borderBottomWidth="1px"
+          borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
+          display={{ base: "flex", md: "none" }}
         >
-          <LuAlignLeft />
-        </IconButton>
+          {/* Mobile Menu Button */}
+          <IconButton
+            size="sm"
+            variant="outline"
+            onClick={() => setSidebarOpen(true)}
+            bg="transparent"
+            borderColor={colorMode === "dark" ? "gray.600" : "gray.300"}
+            color={colorMode === "dark" ? "gray.300" : "gray.600"}
+            _hover={{
+              bg: colorMode === "dark" ? "gray.700" : "gray.50",
+            }}
+          >
+            <LuAlignLeft />
+          </IconButton>
 
-        {/* Theme Toggle */}
-        <Box position="absolute" top="4" right="4" zIndex="10">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+        </Flex>
+
+        {/* Desktop Theme Toggle */}
+        <Box 
+          position="absolute" 
+          top="4" 
+          right="4" 
+          zIndex="10"
+          display={{ base: "none", md: "block" }}
+        >
           <ThemeToggle />
         </Box>
 
         {/* Page Content */}
-        <Box minH="100vh" pt="16" pb="8">
+        <Box 
+          minH={{ base: "calc(100vh - 4rem)", md: "100vh" }}
+          pt={{ base: "0", md: "16" }} 
+          pb="8"
+          px={{ base: "4", md: "0" }}
+          w="full"
+          maxW="100%"
+          overflow="hidden"
+        >
           {children}
         </Box>
       </Box>
