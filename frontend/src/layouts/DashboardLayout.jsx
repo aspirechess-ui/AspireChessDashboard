@@ -39,7 +39,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <Box 
-      minH="100vh"
+      minH={{ base: "100svh", md: "100vh" }}
       w="100%"
       bg={colorMode === "dark" ? "gray.900" : "gray.50"}
       position="relative"
@@ -47,7 +47,7 @@ const DashboardLayout = ({ children }) => {
     >
       <Flex 
         direction={{ base: "column", md: "row" }}
-        minH="100vh"
+        minH={{ base: "100svh", md: "100vh" }}
         w="100%"
         overflow="hidden"
       >

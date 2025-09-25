@@ -233,8 +233,8 @@ const Sidebar = ({
         position="fixed"
         left={{ base: isOpen ? "0" : "-100%", md: "0" }}
         top="0"
-        h="100vh"
-        maxH="100vh"
+        h={{ base: "100svh", md: "100vh" }}
+        maxH={{ base: "100svh", md: "100vh" }}
         w={{ base: "280px", md: isCollapsed ? "16" : "64" }}
         bg={colorMode === "dark" ? "gray.800" : "white"}
         borderRight="1px"
