@@ -233,14 +233,14 @@ const Sidebar = ({
         position="fixed"
         left={{ base: isOpen ? "0" : "-100%", md: "0" }}
         top="0"
-        h={{ base: "100svh", md: "100vh" }}
-        maxH={{ base: "100svh", md: "100vh" }}
+        h={{ base: "100vh", md: "100vh" }}
+        maxH={{ base: "100vh", md: "100vh" }}
         w={{ base: "280px", md: isCollapsed ? "16" : "64" }}
         bg={colorMode === "dark" ? "gray.800" : "white"}
         borderRight="1px"
         borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
         shadow="lg"
-        zIndex="1000"
+        zIndex="1002"
         transition="all 0.3s ease"
         display="flex"
         flexDirection="column"

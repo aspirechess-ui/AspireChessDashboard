@@ -29,6 +29,26 @@ const DashboardLayout = ({ children }) => {
     setLoading(false);
   }, []);
 
+  // Disable body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [sidebarOpen]);
+
   if (loading) {
     return <LoadingSpinner message="Loading dashboard..." />;
   }
@@ -72,6 +92,10 @@ const DashboardLayout = ({ children }) => {
         >
           {/* Mobile Header Bar */}
           <Flex
+            position="fixed"
+            top="0"
+            left="0"
+            right="0"
             h="16"
             minH="16"
             px="4"
@@ -82,7 +106,7 @@ const DashboardLayout = ({ children }) => {
             borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
             display={{ base: "flex", md: "none" }}
             flexShrink="0"
-            zIndex="10"
+            zIndex="1001"
           >
             {/* Mobile Menu Button */}
             <IconButton
@@ -117,10 +141,10 @@ const DashboardLayout = ({ children }) => {
           {/* Page Content */}
           <Box 
             flex="1"
-            pt={{ base: "4", md: "16" }} 
+            pt={{ base: "20", md: "16" }} 
             pb={{ base: "4", md: "8" }}
             px={{ base: "4", md: "0" }}
-            overflow="auto"
+            overflow={sidebarOpen ? "hidden" : "auto"}
             overflowX="hidden"
           >
             {children}
