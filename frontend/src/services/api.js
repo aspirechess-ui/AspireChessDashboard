@@ -1,10 +1,17 @@
 // Main API configuration and utilities
 const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
+// Debug logging - This will help us see what's happening
+console.log("🔍 API_BASE_URL being used:", API_BASE_URL);
+console.log("🔍 All environment variables:", import.meta.env);
+console.log("🔍 VITE_API_URL specifically:", import.meta.env.VITE_API_URL);
+console.log("🔍 Current environment mode:", import.meta.env.MODE);
+
 // API utility class
 class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
+    console.log("🔧 ApiService initialized with baseURL:", this.baseURL);
   }
 
   // Get auth token from localStorage
@@ -36,14 +43,22 @@ class ApiService {
       ...options,
     };
 
-    console.log(`Making API request to: ${url}`, config);
+    console.log("🌐 Making API request:");
+    console.log("  - BaseURL:", this.baseURL);
+    console.log("  - Endpoint:", endpoint);
+    console.log("  - Full URL:", url);
+    console.log("  - Method:", config.method || "GET");
+    console.log("  - Config:", config);
 
     try {
       const response = await fetch(url, config);
-      console.log(`Response status: ${response.status}`);
+      console.log("✅ Response received:");
+      console.log("  - Status:", response.status);
+      console.log("  - Status Text:", response.statusText);
+      console.log("  - URL:", response.url);
 
       const data = await response.json();
-      console.log("Response data:", data);
+      console.log("✅ Response data:", data);
 
       if (!response.ok) {
         const error = new Error(
@@ -55,7 +70,15 @@ class ApiService {
 
       return data;
     } catch (error) {
-      console.error(`API request failed: ${endpoint}`, error);
+      console.error("❌ API request failed:");
+      console.error("  - Endpoint:", endpoint);
+      console.error("  - Full URL:", url);
+      console.error("  - Error:", error);
+      console.error("  - Error Message:", error.message);
+      if (error.response) {
+        console.error("  - Response Status:", error.response.status);
+        console.error("  - Response Data:", error.response.data);
+      }
       throw error;
     }
   }
