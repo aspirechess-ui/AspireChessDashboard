@@ -40,24 +40,17 @@ const DashboardLayout = ({ children }) => {
   return (
     <Box 
       minH="100vh"
-      w={{ base: "100vw", md: "100%" }}
-      maxW={{ base: "100vw", md: "none" }}
+      w="100%"
       bg={colorMode === "dark" ? "gray.900" : "gray.50"}
       position="relative"
+      overflow="hidden"
     >
       <Flex 
         direction={{ base: "column", md: "row" }}
         minH="100vh"
+        w="100%"
+        overflow="hidden"
       >
-      {/* Sidebar */}
-      <Sidebar
-        userRole={user.role}
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-        isCollapsed={sidebarCollapsed}
-        onCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
-
         {/* Sidebar */}
         <Sidebar
           userRole={user.role}
@@ -74,8 +67,8 @@ const DashboardLayout = ({ children }) => {
           ml={{ base: "0", md: sidebarCollapsed ? "16" : "64" }}
           transition="margin-left 0.3s ease"
           overflow="hidden"
-          w={{ base: "100%", md: "auto" }}
-          maxW="100%"
+          w="100%"
+          minW="0"
         >
           {/* Mobile Header Bar */}
           <Flex

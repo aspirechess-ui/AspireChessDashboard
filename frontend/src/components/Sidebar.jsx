@@ -234,15 +234,19 @@ const Sidebar = ({
         left={{ base: isOpen ? "0" : "-100%", md: "0" }}
         top="0"
         h="100vh"
-        w={{ base: "80", md: isCollapsed ? "16" : "64" }}
+        maxH="100vh"
+        w={{ base: "280px", md: isCollapsed ? "16" : "64" }}
         bg={colorMode === "dark" ? "gray.800" : "white"}
         borderRight="1px"
         borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
         shadow="lg"
         zIndex="1000"
         transition="all 0.3s ease"
+        display="flex"
+        flexDirection="column"
+        overflow="hidden"
       >
-        <VStack h="full" spacing="0" align="stretch">
+        <VStack spacing="0" align="stretch" flex="1">
           {/* Header */}
           <Box
             p="4"
@@ -296,8 +300,13 @@ const Sidebar = ({
           </Box>
 
           {/* Navigation Menu */}
-          <VStack flex="1" spacing="1" p="4" align="stretch">
-            {currentMenuItems.map((item) => {
+          <Box 
+            flex="1" 
+            overflow={{ base: "auto", md: "hidden" }}
+            minH="0"
+          >
+            <VStack spacing="1" p="4" align="stretch">
+              {currentMenuItems.map((item) => {
               const Icon = item.icon;
               // Special handling for "My Classes" in teacher role - make it active for any /classes route
               const isTeacherClassesItem =
@@ -355,12 +364,14 @@ const Sidebar = ({
                 </Button>
               );
             })}
-          </VStack>
-
-          <Separator />
-
-          {/* User Profile with Dropdown */}
-          <Box p="4">
+            </VStack>
+          </Box>
+        </VStack>
+        
+        <Separator />
+        
+        {/* User Profile with Dropdown */}
+        <Box p="4">
             <Menu.Root>
               <Menu.Trigger asChild>
                 <Button
@@ -545,8 +556,7 @@ const Sidebar = ({
                 </Menu.Positioner>
               </Portal>
             </Menu.Root>
-          </Box>
-        </VStack>
+        </Box>
       </Box>
     </>
   );
