@@ -233,8 +233,8 @@ const Sidebar = ({
         position="fixed"
         left={{ base: isOpen ? "0" : "-100%", md: "0" }}
         top="0"
-        h={{ base: "100vh", md: "100vh" }}
-        maxH={{ base: "100vh", md: "100vh" }}
+        h={{ base: "100dvh", md: "100vh" }}
+        maxH={{ base: "100dvh", md: "100vh" }}
         w={{ base: "280px", md: isCollapsed ? "16" : "64" }}
         bg={colorMode === "dark" ? "gray.800" : "white"}
         borderRight="1px"
@@ -302,7 +302,7 @@ const Sidebar = ({
           {/* Navigation Menu */}
           <Box 
             flex="1" 
-            overflow={{ base: "auto", md: "hidden" }}
+            overflow="hidden"
             minH="0"
           >
             <VStack spacing="1" p="4" align="stretch">
