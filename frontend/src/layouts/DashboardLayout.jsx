@@ -26,7 +26,22 @@ const DashboardLayout = ({ children }) => {
       }
     }
 
+    // Set CSS custom properties for mobile viewport
+    const setViewportHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+
     setLoading(false);
+
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+      window.removeEventListener('orientationchange', setViewportHeight);
+    };
   }, []);
 
   if (loading) {
@@ -39,12 +54,13 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <Flex 
-      h="100vh" 
-      maxH="100vh"
+      h={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
+      maxH={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
       w="100vw"
       maxW="100vw"
       overflow="hidden"
       bg={colorMode === "dark" ? "gray.900" : "gray.50"}
+      position="relative"
     >
       {/* Sidebar */}
       <Sidebar
@@ -65,6 +81,8 @@ const DashboardLayout = ({ children }) => {
         transition="margin-left 0.3s ease"
         w={{ base: "100vw", md: "auto" }}
         maxW={{ base: "100vw", md: "none" }}
+        h={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
+        maxH={{ base: "calc(var(--vh, 1vh) * 100)", md: "100vh" }}
       >
         {/* Mobile Header Bar */}
         <Flex
@@ -74,6 +92,7 @@ const DashboardLayout = ({ children }) => {
           right="0"
           zIndex="10"
           h="16"
+          minH="16"
           px="4"
           align="center"
           justify="space-between"
@@ -81,6 +100,7 @@ const DashboardLayout = ({ children }) => {
           borderBottomWidth="1px"
           borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
           display={{ base: "flex", md: "none" }}
+          flexShrink="0"
         >
           {/* Mobile Menu Button */}
           <IconButton
@@ -114,13 +134,16 @@ const DashboardLayout = ({ children }) => {
 
         {/* Page Content */}
         <Box 
-          minH={{ base: "calc(100vh - 4rem)", md: "100vh" }}
+          flex="1"
+          h={{ base: "calc(var(--vh, 1vh) * 100 - 4rem)", md: "calc(100vh - 4rem)" }}
+          maxH={{ base: "calc(var(--vh, 1vh) * 100 - 4rem)", md: "calc(100vh - 4rem)" }}
           pt={{ base: "0", md: "16" }} 
-          pb="8"
+          pb={{ base: "4", md: "8" }}
           px={{ base: "4", md: "0" }}
           w="full"
           maxW="100%"
-          overflow="hidden"
+          overflow="auto"
+          overflowX="hidden"
         >
           {children}
         </Box>
