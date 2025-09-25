@@ -1,17 +1,10 @@
 // Main API configuration and utilities
 const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
-// Debug logging - This will help us see what's happening
-console.log("🔍 API_BASE_URL being used:", API_BASE_URL);
-console.log("🔍 All environment variables:", import.meta.env);
-console.log("🔍 VITE_API_URL specifically:", import.meta.env.VITE_API_URL);
-console.log("🔍 Current environment mode:", import.meta.env.MODE);
-
 // API utility class
 class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
-    console.log("🔧 ApiService initialized with baseURL:", this.baseURL);
   }
 
   // Get auth token from localStorage

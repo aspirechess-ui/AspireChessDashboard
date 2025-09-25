@@ -16,6 +16,7 @@ import {
   Portal,
   createListCollection,
 } from "@chakra-ui/react";
+import { apiService } from "../../services/api.js";
 import {
   LuEye,
   LuEyeOff,
@@ -85,43 +86,32 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          expectedRole: formData.role, // Send expected role for validation
-        }),
+      const data = await apiService.post("/auth/login", {
+        email: formData.email,
+        password: formData.password,
+        expectedRole: formData.role, // Send expected role for validation
       });
 
-      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        // Redirect based on role
-        switch (data.user.role) {
-          case "admin":
-            navigate("/admin/manage-users");
-            break;
-          case "teacher":
-            navigate("/teacher/classes");
-            break;
-          case "student":
-            navigate("/student/classes");
-            break;
-          default:
-            navigate("/");
-        }
-      } else {
-        setError(data.message || "Login failed");
+      // Redirect based on role
+      switch (data.user.role) {
+        case "admin":
+          navigate("/admin/manage-users");
+          break;
+        case "teacher":
+          navigate("/teacher/classes");
+          break;
+        case "student":
+          navigate("/student/classes");
+          break;
+        default:
+          navigate("/");
       }
     } catch (error) {
-      setError("Network error. Please try again.");
+      console.error("Login error:", error);
+      setError(error.message || "Network error. Please try again.");
     } finally {
       setIsLoading(false);
     }
