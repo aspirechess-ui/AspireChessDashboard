@@ -26,22 +26,7 @@ const DashboardLayout = ({ children }) => {
       }
     }
 
-    // Set CSS custom properties for mobile viewport
-    const setViewportHeight = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-
-    setViewportHeight();
-    window.addEventListener('resize', setViewportHeight);
-    window.addEventListener('orientationchange', setViewportHeight);
-
     setLoading(false);
-
-    return () => {
-      window.removeEventListener('resize', setViewportHeight);
-      window.removeEventListener('orientationchange', setViewportHeight);
-    };
   }, []);
 
   if (loading) {
@@ -53,15 +38,17 @@ const DashboardLayout = ({ children }) => {
   }
 
   return (
-    <Flex 
-      h={{ base: "100dvh", md: "100vh" }}
-      maxH={{ base: "100dvh", md: "100vh" }}
-      w="100vw"
-      maxW="100vw"
-      overflow="hidden"
+    <Box 
+      minH="100vh"
+      w={{ base: "100vw", md: "100%" }}
+      maxW={{ base: "100vw", md: "none" }}
       bg={colorMode === "dark" ? "gray.900" : "gray.50"}
       position="relative"
     >
+      <Flex 
+        direction={{ base: "column", md: "row" }}
+        minH="100vh"
+      >
       {/* Sidebar */}
       <Sidebar
         userRole={user.role}
@@ -71,84 +58,83 @@ const DashboardLayout = ({ children }) => {
         onCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      {/* Main Content */}
-      <Box
-        flex="1"
-        ml={{ base: "0", md: sidebarCollapsed ? "16" : "64" }}
-        overflow="auto"
-        position="relative"
-        bg={colorMode === "dark" ? "gray.900" : "gray.50"}
-        transition="margin-left 0.3s ease"
-        w={{ base: "100vw", md: "auto" }}
-        maxW={{ base: "100vw", md: "none" }}
-        h={{ base: "100dvh", md: "100vh" }}
-        maxH={{ base: "100dvh", md: "100vh" }}
-      >
-        {/* Mobile Header Bar */}
-        <Flex
-          position="sticky"
-          top="0"
-          left="0"
-          right="0"
-          zIndex="10"
-          h="16"
-          minH="16"
-          px="4"
-          align="center"
-          justify="space-between"
-          bg={colorMode === "dark" ? "gray.800" : "white"}
-          borderBottomWidth="1px"
-          borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
-          display={{ base: "flex", md: "none" }}
-          flexShrink="0"
-        >
-          {/* Mobile Menu Button */}
-          <IconButton
-            size="sm"
-            variant="outline"
-            onClick={() => setSidebarOpen(true)}
-            bg="transparent"
-            borderColor={colorMode === "dark" ? "gray.600" : "gray.300"}
-            color={colorMode === "dark" ? "gray.300" : "gray.600"}
-            _hover={{
-              bg: colorMode === "dark" ? "gray.700" : "gray.50",
-            }}
-          >
-            <LuAlignLeft />
-          </IconButton>
+        {/* Sidebar */}
+        <Sidebar
+          userRole={user.role}
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen(!sidebarOpen)}
+          isCollapsed={sidebarCollapsed}
+          onCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        />
 
-          {/* Theme Toggle */}
-          <ThemeToggle />
-        </Flex>
-
-        {/* Desktop Theme Toggle */}
-        <Box 
-          position="absolute" 
-          top="4" 
-          right="4" 
-          zIndex="10"
-          display={{ base: "none", md: "block" }}
-        >
-          <ThemeToggle />
-        </Box>
-
-        {/* Page Content */}
-        <Box 
-          flex="1"
-          h={{ base: "calc(100dvh - 4rem)", md: "calc(100vh - 4rem)" }}
-          maxH={{ base: "calc(100dvh - 4rem)", md: "calc(100vh - 4rem)" }}
-          pt={{ base: "0", md: "16" }} 
-          pb={{ base: "6", md: "8" }}
-          px={{ base: "4", md: "0" }}
-          w="full"
+        {/* Main Content Area */}
+        <Flex 
+          direction="column" 
+          flex="1" 
+          ml={{ base: "0", md: sidebarCollapsed ? "16" : "64" }}
+          transition="margin-left 0.3s ease"
+          overflow="hidden"
+          w={{ base: "100%", md: "auto" }}
           maxW="100%"
-          overflow="auto"
-          overflowX="hidden"
         >
-          {children}
-        </Box>
-      </Box>
-    </Flex>
+          {/* Mobile Header Bar */}
+          <Flex
+            h="16"
+            minH="16"
+            px="4"
+            align="center"
+            justify="space-between"
+            bg={colorMode === "dark" ? "gray.800" : "white"}
+            borderBottomWidth="1px"
+            borderColor={colorMode === "dark" ? "gray.700" : "gray.200"}
+            display={{ base: "flex", md: "none" }}
+            flexShrink="0"
+            zIndex="10"
+          >
+            {/* Mobile Menu Button */}
+            <IconButton
+              size="sm"
+              variant="outline"
+              onClick={() => setSidebarOpen(true)}
+              bg="transparent"
+              borderColor={colorMode === "dark" ? "gray.600" : "gray.300"}
+              color={colorMode === "dark" ? "gray.300" : "gray.600"}
+              _hover={{
+                bg: colorMode === "dark" ? "gray.700" : "gray.50",
+              }}
+            >
+              <LuAlignLeft />
+            </IconButton>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
+          </Flex>
+
+          {/* Desktop Theme Toggle */}
+          <Box 
+            position="absolute" 
+            top="4" 
+            right="4" 
+            zIndex="10"
+            display={{ base: "none", md: "block" }}
+          >
+            <ThemeToggle />
+          </Box>
+
+          {/* Page Content */}
+          <Box 
+            flex="1"
+            pt={{ base: "4", md: "16" }} 
+            pb={{ base: "4", md: "8" }}
+            px={{ base: "4", md: "0" }}
+            overflow="auto"
+            overflowX="hidden"
+          >
+            {children}
+          </Box>
+        </Flex>
+      </Flex>
+    </Box>
   );
 };
 
