@@ -27,6 +27,7 @@ import lichessService from "../../../services/lichess";
 import lichessAutoSyncService from "../../../services/lichessAutoSync";
 import ViewUserCard from "../../../components/ViewUserCard";
 import LichessStat from "../../common/LichessStat";
+import { normalizeImageUrl } from "../../../utils/imageUrl";
 
 const LichessIndividualStatPage = () => {
   const { colorMode } = useColorMode();
@@ -62,7 +63,11 @@ const LichessIndividualStatPage = () => {
 
       const response = await lichessService.getStudentStats(username);
       if (response.success) {
-        setStudentData(response.data.stats); // Use unified stats structure
+        const normalizedStats = {
+          ...response.data.stats,
+          profileImageUrl: normalizeImageUrl(response.data.stats?.profileImageUrl)
+        };
+        setStudentData(normalizedStats); // Use unified stats structure
         setLastSyncAt(response.data.stats?.lastSyncAt || null);
       } else {
         throw new Error(response.message || "Failed to fetch student data");

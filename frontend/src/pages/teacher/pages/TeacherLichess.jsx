@@ -36,6 +36,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import lichessService from "../../../services/lichess";
 import batchService from "../../../services/batches";
 import classService from "../../../services/classes";
+import { normalizeImageUrl } from "../../../utils/imageUrl";
 
 const TeacherLichess = () => {
   const { colorMode } = useColorMode();
@@ -143,7 +144,13 @@ const TeacherLichess = () => {
         classes: s.classes
       })));
       
-      setStudents(students);
+      // Normalize profile image URLs
+      const normalizedStudents = students.map(student => ({
+        ...student,
+        profileImageUrl: normalizeImageUrl(student.profileImageUrl)
+      }));
+      
+      setStudents(normalizedStudents);
     } catch (err) {
       console.error('Failed to fetch student Lichess data:', err);
       setError(err.message || 'Failed to load student data');
