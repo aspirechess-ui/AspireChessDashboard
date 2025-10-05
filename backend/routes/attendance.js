@@ -5,6 +5,7 @@ import User from "../models/User.js";
 import UserDetails from "../models/UserDetails.js";
 import Batch from "../models/Batch.js";
 import { protect, authorize } from "../middleware/auth.js";
+import { imageURL } from "../utils/imageUrl.js";
 
 const router = express.Router();
 
@@ -216,7 +217,7 @@ router.get(
                       ? {
                           firstName: details.firstName,
                           lastName: details.lastName,
-                          profileImageUrl: details.profileImageUrl,
+                          profileImageUrl: imageURL(details.profileImageUrl),
                         }
                       : null,
                   },
@@ -315,7 +316,7 @@ router.get("/:id", protect, authorize("teacher"), async (req, res) => {
                 ? {
                     firstName: details.firstName,
                     lastName: details.lastName,
-                    profileImageUrl: details.profileImageUrl,
+                    profileImageUrl: imageURL(details.profileImageUrl),
                   }
                 : null,
             },
@@ -502,7 +503,7 @@ router.get(
                   ? {
                       firstName: details.firstName,
                       lastName: details.lastName,
-                      profileImageUrl: details.profileImageUrl,
+                      profileImageUrl: imageURL(details.profileImageUrl),
                     }
                   : null,
               },

@@ -12,6 +12,7 @@ import {
   sendEmailChangeConfirmation,
   sendPasswordChangeConfirmation,
 } from "../utils/email.js";
+import { imageURL, normalizeUserDetailsImageUrl } from "../utils/imageUrl.js";
 
 const router = express.Router();
 
@@ -39,9 +40,9 @@ router.get("/profile", protect, async (req, res) => {
         role: user.role,
         firstName: userDetails?.firstName,
         lastName: userDetails?.lastName,
-        profileImageUrl: userDetails?.profileImageUrl,
+        profileImageUrl: imageURL(userDetails?.profileImageUrl),
       },
-      userDetails: userDetails || null,
+      userDetails: normalizeUserDetailsImageUrl(userDetails),
     });
   } catch (error) {
     console.error("Error fetching user profile:", error);
