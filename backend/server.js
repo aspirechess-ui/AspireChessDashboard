@@ -5,6 +5,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 // Import routes
@@ -65,7 +66,6 @@ const corsOptions = {
     
     const allowedOrigins = [
       process.env.FRONTEND_URL || "http://localhost:5173",
-      "https://aspire-chess-dashboard-frontend.vercel.app",
       "http://localhost:5173",
       "http://localhost:3000"
     ];
@@ -94,8 +94,13 @@ app.options('*', cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Static files
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Static files with proper headers for images
+app.use("/uploads", (req, res, next) => {
+  // Set proper headers for images
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+}, express.static(path.join(__dirname, "uploads")));
 
 // Database connection - Simple and clean
 mongoose
@@ -109,6 +114,24 @@ mongoose
     console.error("❌ MongoDB connection error:", error);
     process.exit(1);
   });
+
+// API route for serving profile images with proper CORS headers
+app.get("/api/uploads/profiles/:filename", (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, "uploads", "profiles", filename);
+  
+  // Set proper CORS headers for images
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+  
+  // Check if file exists and serve it
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).json({ error: 'Image not found' });
+  }
+});
 
 // Routes
 app.use("/api/auth", authRoutes);

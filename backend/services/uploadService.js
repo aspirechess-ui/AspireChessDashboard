@@ -207,9 +207,24 @@ class UploadService {
       }
 
       const relativePath = path.relative(process.cwd(), filepath);
-      const url = `${
-        process.env.BACKEND_URL || "http://localhost:5000"
-      }/${relativePath.replace(/\\/g, "/")}`;
+      
+      // Determine the correct base URL - prioritize environment variables
+      let baseUrl;
+      
+      if (process.env.BACKEND_URL) {
+        // Use explicitly set backend URL (highest priority)
+        baseUrl = process.env.BACKEND_URL;
+      } else if (process.env.VERCEL_URL) {
+        // Use Vercel URL if available
+        baseUrl = `https://${process.env.VERCEL_URL}`;
+      } else {
+        // Development fallback
+        baseUrl = "http://localhost:5000";
+      }
+      
+      // Use API route for serving images to ensure proper CORS headers
+      const imageFilename = path.basename(filepath);
+      const url = `${baseUrl}/api/uploads/profiles/${imageFilename}`;
 
       return {
         url,
