@@ -5,7 +5,7 @@ import Batch from "../models/Batch.js";
 import Class from "../models/Class.js";
 import SignupCodeLog from "../models/SignupCodeLog.js";
 import { protect, authorize } from "../middleware/auth.js";
-import { normalizeUserDetailsImageUrl } from "../utils/imageUrl.js";
+
 
 const router = express.Router();
 
@@ -116,7 +116,7 @@ router.get("/users", protect, authorize("admin"), async (req, res) => {
 
         return {
           ...userObj,
-          userDetails: normalizeUserDetailsImageUrl(userDetails),
+          userDetails: userDetails,
         };
       })
     );

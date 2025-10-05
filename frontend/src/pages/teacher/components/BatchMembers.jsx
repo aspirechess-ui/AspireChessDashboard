@@ -27,6 +27,7 @@ import {
 import { useColorMode } from "../../../components/ui/color-mode";
 import ViewUserCard from "../../../components/ViewUserCard";
 import batchService from "../../../services/batches";
+import { normalizeUserImageUrl } from "../../../utils/imageUrl";
 
 const BatchMembers = ({ batchId, batchName }) => {
   const { colorMode } = useColorMode();
@@ -61,7 +62,11 @@ const BatchMembers = ({ batchId, batchName }) => {
       const response = await batchService.getBatchStudents(batchId);
 
       if (response.success) {
-        setBatchStudents(response.data.students || []);
+        // Normalize image URLs on the frontend
+        const normalizedStudents = (response.data.students || []).map(student => 
+          normalizeUserImageUrl(student)
+        );
+        setBatchStudents(normalizedStudents);
       } else {
         setError(response.message || "Failed to fetch batch students");
       }

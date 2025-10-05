@@ -5,7 +5,6 @@ import SignupCodeLog from "../models/SignupCodeLog.js";
 import User from "../models/User.js";
 import UserDetails from "../models/UserDetails.js";
 import { protect, authorize } from "../middleware/auth.js";
-import { imageURL, normalizeUserDetailsImageUrl } from "../utils/imageUrl.js";
 
 const router = express.Router();
 
@@ -322,7 +321,7 @@ router.get(
               email: student.email,
               role: student.role,
               createdAt: student.createdAt,
-              userDetails: details ? normalizeUserDetailsImageUrl(details) : null,
+              userDetails: details || null,
             };
           })
         );
@@ -387,7 +386,7 @@ router.get("/:id", protect, authorize("admin"), async (req, res) => {
               ? {
                   firstName: details.firstName,
                   lastName: details.lastName,
-                  profileImageUrl: imageURL(details.profileImageUrl),
+                  profileImageUrl: details.profileImageUrl,
                 }
               : null,
           };

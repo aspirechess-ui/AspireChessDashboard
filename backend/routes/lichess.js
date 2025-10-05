@@ -3,7 +3,7 @@ import { protect } from "../middleware/auth.js";
 import LichessAccount from "../models/LichessAccount.js";
 import User from "../models/User.js";
 import UserDetails from "../models/UserDetails.js";
-import { imageURL } from "../utils/imageUrl.js";
+
 
 const router = express.Router();
 
@@ -259,7 +259,7 @@ const formatLichessData = (account, userDetails = null, isStudentView = false) =
       lastName: userDetails.lastName,
       role: account.userId?.role || '',
       createdAt: account.userId?.createdAt || new Date(),
-      profileImageUrl: imageURL(userDetails.profileImageUrl),
+      profileImageUrl: userDetails.profileImageUrl,
       userDetails: {
         firstName: userDetails.firstName,
         lastName: userDetails.lastName,
@@ -268,7 +268,7 @@ const formatLichessData = (account, userDetails = null, isStudentView = false) =
         dateOfBirth: userDetails.dateOfBirth,
         gender: userDetails.gender,
         nationality: userDetails.nationality,
-        profileImageUrl: imageURL(userDetails.profileImageUrl),
+        profileImageUrl: userDetails.profileImageUrl,
         address: userDetails.address,
         emergencyContact: userDetails.emergencyContact,
         parentName: userDetails.parentName,
@@ -747,7 +747,7 @@ router.get("/teacher/overview", protect, async (req, res) => {
             return null; // Return null instead of 0 to distinguish "no data" from "0% win rate"
           })(),
           lastSyncAt: account.lastSyncAt,
-          profileImageUrl: imageURL(userDetails?.profileImageUrl) || null
+          profileImageUrl: userDetails?.profileImageUrl || null
         };
         
         students.push(studentData);

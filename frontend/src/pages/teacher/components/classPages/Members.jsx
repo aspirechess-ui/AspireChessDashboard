@@ -38,6 +38,7 @@ import PendingRequestsCard from "../PendingRequestsCard/";
 import DeletePrompt from "../../../../components/DeletePrompt.jsx";
 import StudentIndividualAttendanceCard from "../StudentIndividualAttendanceCard.jsx";
 import ViewUserCard from "../../../../components/ViewUserCard.jsx";
+import { normalizeUserImageUrl } from "../../../../utils/imageUrl";
 
 const Members = ({ classData, onRefresh }) => {
   const { colorMode } = useColorMode();
@@ -57,16 +58,19 @@ const Members = ({ classData, onRefresh }) => {
   // Responsive breakpoints
   const showMobileCards = useBreakpointValue({ base: true, lg: false });
 
-  // Filter enrolled students based on search term
-  const filteredStudents =
-    classData.enrolledStudents?.filter(
-      (student) =>
-        student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (student.userDetails?.firstName &&
-          `${student.userDetails.firstName} ${student.userDetails.lastName}`
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()))
-    ) || [];
+  // Normalize image URLs and filter enrolled students based on search term
+  const normalizedStudents = classData.enrolledStudents?.map(student => 
+    normalizeUserImageUrl(student)
+  ) || [];
+  
+  const filteredStudents = normalizedStudents.filter(
+    (student) =>
+      student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (student.userDetails?.firstName &&
+        `${student.userDetails.firstName} ${student.userDetails.lastName}`
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()))
+  );
 
   // Fetch pending requests count for all classes
   const fetchPendingRequestsCount = useCallback(async () => {

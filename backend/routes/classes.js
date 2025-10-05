@@ -6,7 +6,6 @@ import UserDetails from "../models/UserDetails.js";
 import Attendance from "../models/Attendance.js";
 import ClassJoinRequest from "../models/ClassJoinRequest.js";
 import { protect, authorize } from "../middleware/auth.js";
-import { normalizeUserDetailsImageUrl } from "../utils/imageUrl.js";
 
 const router = express.Router();
 
@@ -113,7 +112,7 @@ router.get(
 
                 return {
                   ...student,
-                  userDetails: details ? normalizeUserDetailsImageUrl(details) : null,
+                  userDetails: details || null,
                 };
               }
             );
@@ -217,7 +216,7 @@ router.get(
 
           return {
             ...student,
-            userDetails: details ? normalizeUserDetailsImageUrl(details) : null,
+            userDetails: details || null,
           };
         });
       }
@@ -411,7 +410,7 @@ router.get(
 
           return {
             ...student,
-            userDetails: details ? normalizeUserDetailsImageUrl(details) : null,
+            userDetails: details || null,
           };
         });
       }
@@ -541,7 +540,7 @@ router.get("/:id", protect, authorize("teacher"), async (req, res) => {
 
         return {
           ...student,
-          userDetails: details ? normalizeUserDetailsImageUrl(details) : null,
+          userDetails: details || null,
         };
       });
     }
