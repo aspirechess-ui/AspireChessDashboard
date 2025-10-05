@@ -27,6 +27,8 @@ import {
   TeacherSettings,
   TeacherAnnouncement,
 } from "./pages/teacher";
+import TeacherLichess from "./pages/teacher/pages/TeacherLichess";
+import LichessIndividualStatPage from "./pages/teacher/components/LichessIndividualStatPage";
 
 // Teacher Components
 import ClassSettings from "./pages/teacher/components/ClassSettings";
@@ -36,6 +38,7 @@ import ViewClass from "./pages/teacher/components/ViewClass";
 import { StudentSettings, StudentAnnouncements } from "./pages/student";
 import MyClasses from "./pages/student/pages/MyClasses";
 import ClassPage from "./pages/student/components/MyClassesPages/JoinedClassesPages/ClassPage";
+import StudentLichess from "./pages/student/pages/StudentLichess";
 
 // Placeholder components for now - will be created later
 const ManageClasses = () => <div>Manage Classes</div>;
@@ -315,6 +318,26 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/teacher/lichess"
+        element={
+          <ProtectedRoute requiredRole="teacher">
+            <DashboardLayout>
+              <TeacherLichess />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/teacher/lichess/student/:username"
+        element={
+          <ProtectedRoute requiredRole="teacher">
+            <DashboardLayout>
+              <LichessIndividualStatPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/teacher/profile"
         element={
           <ProtectedRoute requiredRole="teacher">
@@ -362,6 +385,16 @@ const AppRoutes = () => {
           <ProtectedRoute requiredRole="student">
             <DashboardLayout>
               <StudentAnnouncements />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student/lichess"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <DashboardLayout>
+              <StudentLichess />
             </DashboardLayout>
           </ProtectedRoute>
         }

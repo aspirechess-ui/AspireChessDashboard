@@ -22,6 +22,7 @@ import {
   LuSettings,
   LuLogOut,
 } from "react-icons/lu";
+import { SiLichess } from "react-icons/si";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useColorMode } from "./ui/color-mode";
 
@@ -37,6 +38,7 @@ const Sidebar = ({
   const { colorMode } = useColorMode();
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
@@ -53,6 +55,28 @@ const Sidebar = ({
       }
     }
   }, []);
+
+  // Handle escape key to close menus when sidebar overlay is clicked
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape' && isOpen) {
+        // If menu is open, close it first
+        if (menuOpen) {
+          setMenuOpen(false);
+          // Don't close sidebar if menu was open
+          event.preventDefault();
+        } else {
+          // If menu is not open, close sidebar
+          onToggle();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isOpen, menuOpen, onToggle]);
 
   const fetchUserDetails = async () => {
     try {
@@ -122,6 +146,11 @@ const Sidebar = ({
       //   path: "/teacher/attendance",
       // },
       {
+        label: "Lichess",
+        icon: SiLichess,
+        path: "/teacher/lichess",
+      },
+      {
         label: "Announcements",
         icon: LuMegaphone,
         path: "/teacher/announcements",
@@ -132,6 +161,11 @@ const Sidebar = ({
         label: "My Classes",
         icon: LuBookOpen,
         path: "/student/classes",
+      },
+      {
+        label: "Lichess",
+        icon: SiLichess,
+        path: "/student/lichess",
       },
       {
         label: "Announcements",
@@ -214,6 +248,21 @@ const Sidebar = ({
     }
   };
 
+  // Handle overlay click - close sidebar and any open menus
+  const handleOverlayClick = () => {
+    // If menu is open, close it first
+    if (menuOpen) {
+      setMenuOpen(false);
+      // Small delay to allow menu animation to complete
+      setTimeout(() => {
+        onToggle();
+      }, 150);
+    } else {
+      // If menu is not open, close sidebar immediately
+      onToggle();
+    }
+  };
+
   return (
     <>
       {/* Mobile Overlay */}
@@ -224,7 +273,7 @@ const Sidebar = ({
           bg="blackAlpha.600"
           zIndex="999"
           display={{ base: "block", md: "none" }}
-          onClick={onToggle}
+          onClick={handleOverlayClick}
         />
       )}
 
@@ -371,8 +420,15 @@ const Sidebar = ({
         <Separator />
         
         {/* User Profile with Dropdown */}
-        <Box p="4">
-            <Menu.Root>
+        <Box p="4" position="relative">
+            <Menu.Root 
+              closeOnSelect={true} 
+              closeOnBlur={true}
+              closeOnEsc={true}
+              modal={false}
+              open={menuOpen}
+              onOpenChange={({ open }) => setMenuOpen(open)}
+            >
               <Menu.Trigger asChild>
                 <Button
                   variant="ghost"
@@ -493,13 +549,26 @@ const Sidebar = ({
                 </Button>
               </Menu.Trigger>
 
-              <Portal>
-                <Menu.Positioner>
+              <Portal container={document.body}>
+                <Menu.Positioner
+                  positioning={{
+                    placement: isCollapsed ? "right-end" : "top-end",
+                    offset: { mainAxis: 8, crossAxis: 0 },
+                    flip: true,
+                    boundary: "viewport",
+                  }}
+                >
                   <Menu.Content
                     bg={colorMode === "dark" ? "gray.800" : "white"}
-                    shadow="lg"
+                    shadow="xl"
                     minW="200px"
                     color={colorMode === "dark" ? "white" : "gray.900"}
+                    zIndex="1010"
+                    borderWidth="1px"
+                    borderColor={colorMode === "dark" ? "gray.600" : "gray.200"}
+                    borderRadius="md"
+                    maxH="80vh"
+                    overflow="auto"
                   >
                     <Menu.Item
                       value="settings"

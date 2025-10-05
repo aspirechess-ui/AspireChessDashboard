@@ -16,6 +16,7 @@ import classRoutes from "./routes/classes.js";
 import attendanceRoutes from "./routes/attendance.js";
 import announcementRoutes from "./routes/announcements.js";
 import lichessRoutes from "./routes/lichess.js";
+import lichessAutoSyncRoutes from "./routes/lichessAutoSync.js";
 import classJoinRequestRoutes from "./routes/classJoinRequests.js";
 
 // Import utilities
@@ -118,6 +119,7 @@ app.use("/api/classes", classRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/announcements", announcementRoutes);
 app.use("/api/lichess", lichessRoutes);
+app.use("/api/lichess-auto-sync", lichessAutoSyncRoutes);
 app.use("/api/class-join-requests", classJoinRequestRoutes);
 
 // Health check endpoint

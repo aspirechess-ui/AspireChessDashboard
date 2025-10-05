@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, VStack, HStack, Text, Heading, Button } from "@chakra-ui/react";
 import { useColorMode } from "../../../components/ui/color-mode";
 import { ProfileSettings, AccountSettings } from "../../common";
+import LichessSettings from "./LichessSettings";
 
 const StudentSettings = () => {
   const { colorMode } = useColorMode();
@@ -12,6 +13,11 @@ const StudentSettings = () => {
       id: "profile",
       label: "Profile Settings",
       component: <ProfileSettings userRole="student" />,
+    },
+    {
+      id: "lichess",
+      label: "Lichess Settings",
+      component: <LichessSettings />,
     },
     {
       id: "account",

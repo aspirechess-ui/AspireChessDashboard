@@ -74,7 +74,7 @@ router.get(
         .populate("teacherId", "email")
         .populate({
           path: "enrolledStudents",
-          select: "email assignedBatch",
+          select: "email assignedBatch createdAt role",
           populate: {
             path: "assignedBatch",
             select: "batchName",
@@ -179,7 +179,7 @@ router.get(
         .populate("teacherId", "email")
         .populate({
           path: "enrolledStudents",
-          select: "email assignedBatch",
+          select: "email assignedBatch createdAt role",
           populate: {
             path: "assignedBatch",
             select: "batchName",
