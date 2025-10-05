@@ -5,7 +5,7 @@ import SignupCodeLog from "../models/SignupCodeLog.js";
 import User from "../models/User.js";
 import UserDetails from "../models/UserDetails.js";
 import { protect, authorize } from "../middleware/auth.js";
-import { imageURL } from "../utils/imageUrl.js";
+import { imageURL, normalizeUserDetailsImageUrl } from "../utils/imageUrl.js";
 
 const router = express.Router();
 
