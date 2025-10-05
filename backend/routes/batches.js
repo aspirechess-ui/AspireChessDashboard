@@ -322,7 +322,7 @@ router.get(
               email: student.email,
               role: student.role,
               createdAt: student.createdAt,
-              userDetails: details || null,
+              userDetails: details ? normalizeUserDetailsImageUrl(details) : null,
             };
           })
         );

@@ -4,6 +4,7 @@ import Batch from "../models/Batch.js";
 import Class from "../models/Class.js";
 import User from "../models/User.js";
 import { protect, authorize } from "../middleware/auth.js";
+import { imageURL } from "../utils/imageUrl.js";
 
 const router = express.Router();
 
@@ -591,7 +592,7 @@ router.get(
           read.userId.email,
         email: read.userId.email,
         role: read.userId.role,
-        profileImage: read.userId.userDetails?.profileImageUrl,
+        profileImage: imageURL(read.userId.userDetails?.profileImageUrl),
         readAt: read.readAt,
       }));
 
