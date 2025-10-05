@@ -18,6 +18,7 @@ import {
   LuCalendar,
 } from "react-icons/lu";
 import { useColorMode } from "../../components/ui/color-mode";
+import { normalizeImageUrl } from "../../utils/imageUrl";
 
 const AnnouncementListItem = ({
   announcement,
@@ -188,7 +189,7 @@ const AnnouncementListItem = ({
                   <Avatar
                     size="xs"
                     name={announcement.createdBy?.name || "Unknown"}
-                    src={announcement.createdBy?.profileImage}
+                    src={normalizeImageUrl(announcement.createdBy?.profileImage)}
                   />
                   <Text
                     fontSize="xs"

@@ -18,6 +18,7 @@ import {
   Portal,
   Dialog,
 } from "@chakra-ui/react";
+import { normalizeImageUrl } from "../../utils/imageUrl";
 import {
   LuX,
   LuMegaphone,
@@ -665,7 +666,7 @@ const ViewAnnouncementCard = ({
                                         >
                                           {reader.profileImage && (
                                             <Avatar.Image
-                                              src={reader.profileImage}
+                                              src={normalizeImageUrl(reader.profileImage)}
                                               alt={reader.name}
                                             />
                                           )}
