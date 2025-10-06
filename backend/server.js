@@ -67,7 +67,7 @@ const corsOptions = {
     const allowedOrigins = [
       process.env.FRONTEND_URL,
       "https://aspire-chess-dashboard-frontend.vercel.app",
-      "https://dashboard.aspirechessacademy.in/",
+      "https://dashboard.aspirechessacademy.in",
       "http://localhost:5173",
       "http://localhost:3000"
     ].filter(Boolean); // Remove any null/undefined values
