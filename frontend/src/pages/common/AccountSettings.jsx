@@ -218,7 +218,6 @@ const AccountSettings = () => {
     try {
       // First verify the PIN without applying the email change
       await authService.verifyCode(
-        emailData.newEmail,
         codeString,
         "email_change"
       );
