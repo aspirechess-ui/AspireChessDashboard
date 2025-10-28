@@ -37,7 +37,7 @@ import {
   StepsTitle,
   StepsSeparator,
 } from "../../components/ui/steps";
-import { apiService } from "../../services/api";
+import { apiService } from "../../services/api.js";
 
 const SignUp = () => {
   const { colorMode } = useColorMode();
