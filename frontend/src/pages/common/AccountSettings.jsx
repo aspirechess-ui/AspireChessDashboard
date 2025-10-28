@@ -216,17 +216,12 @@ const AccountSettings = () => {
 
     setEmailLoading(true);
     try {
-      // First verify the PIN without applying the email change
-      await authService.verifyCode(
-        codeString,
-        "email_change"
-      );
-
-      // If verification is successful, move to confirmed step
+      // Just validate the format and move to confirmed step
+      // The actual verification will happen in the confirmation step
       setEmailStep("confirmed");
       showEmailNotification(
-        "PIN Verified Successfully",
-        "Your verification code is correct. Click 'Apply Changes' to complete the email update.",
+        "Ready to Apply Changes",
+        "Click 'Apply Changes' to complete the email update.",
         "success"
       );
     } catch (error) {
@@ -277,13 +272,17 @@ const AccountSettings = () => {
   const handleEmailChangeConfirm = async () => {
     setEmailLoading(true);
     try {
-      // Apply the email change
+      // Apply the email change - this does the actual verification and update
       const codeString = emailVerificationCode.join("");
-      await authService.verifyEmailChange(codeString);
+      const response = await authService.verifyEmailChange(codeString);
+      
+      // Refresh user data to get updated email
+      await authService.verifyToken();
+      
       setEmailStep("success");
       showEmailNotification(
         "Email Updated Successfully",
-        "Your email address has been updated",
+        `Your email address has been updated to ${response.newEmail || emailData.newEmail}`,
         "success"
       );
 
