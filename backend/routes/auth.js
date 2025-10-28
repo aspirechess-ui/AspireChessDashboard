@@ -42,9 +42,20 @@ router.post(
       .isLength({ min: 1 })
       .withMessage("Last name is required"),
     body("phoneNumber")
-      .matches(/^\+?[\d\s\-\(\)]+$/)
-      .isLength({ min: 10, max: 15 })
-      .withMessage("Please provide a valid phone number"),
+      .custom((value) => {
+        // Remove all non-digit characters except +
+        const cleanedNumber = value.replace(/[^\d+]/g, '');
+        // Check if it has 10-15 digits (excluding the + sign)
+        const digitsOnly = cleanedNumber.replace(/\+/g, '');
+        if (digitsOnly.length < 10 || digitsOnly.length > 15) {
+          throw new Error('Phone number must contain 10-15 digits');
+        }
+        // Check if it matches basic phone number pattern
+        if (!/^\+?[\d\s\-\(\)\.]+$/.test(value)) {
+          throw new Error('Invalid phone number format');
+        }
+        return true;
+      }),
     body("signupCode")
       .trim()
       .isLength({ min: 1 })
@@ -57,9 +68,20 @@ router.post(
       .isLength({ min: 1 })
       .withMessage("Parent name is required"),
     body("parentPhoneNumber")
-      .matches(/^\+?[\d\s\-\(\)]+$/)
-      .isLength({ min: 10, max: 15 })
-      .withMessage("Please provide a valid parent phone number"),
+      .custom((value) => {
+        // Remove all non-digit characters except +
+        const cleanedNumber = value.replace(/[^\d+]/g, '');
+        // Check if it has 10-15 digits (excluding the + sign)
+        const digitsOnly = cleanedNumber.replace(/\+/g, '');
+        if (digitsOnly.length < 10 || digitsOnly.length > 15) {
+          throw new Error('Parent phone number must contain 10-15 digits');
+        }
+        // Check if it matches basic phone number pattern
+        if (!/^\+?[\d\s\-\(\)\.]+$/.test(value)) {
+          throw new Error('Invalid parent phone number format');
+        }
+        return true;
+      }),
   ],
   async (req, res) => {
     try {
