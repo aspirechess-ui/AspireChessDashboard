@@ -37,6 +37,7 @@ import {
   StepsTitle,
   StepsSeparator,
 } from "../../components/ui/steps";
+import { apiService } from "../../services/api";
 
 const SignUp = () => {
   const { colorMode } = useColorMode();
@@ -132,17 +133,9 @@ const SignUp = () => {
     setError("");
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const data = await apiService.post("/auth/register", formData);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (data.success !== false) {
         setSuccess("Account created successfully! Please login.");
         setTimeout(() => {
           navigate("/login");
@@ -155,7 +148,9 @@ const SignUp = () => {
       }
     } catch (error) {
       console.error("Network error:", error);
-      setError("Network error. Please try again.");
+      setError(
+        error.message || error.response?.data?.message || "Network error. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
