@@ -124,7 +124,7 @@ const ForgotPassword = () => {
 
     try {
       // Verify the PIN with the backend
-      await authService.verifyForgotPasswordCode(email, pinString);
+      await authService.verifyPublicForgotPasswordCode(email, pinString);
       setSuccess("PIN verified successfully. Please set your new password.");
       setStep("reset");
     } catch (error) {
